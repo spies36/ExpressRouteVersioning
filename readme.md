@@ -1,9 +1,9 @@
 # Express Route Versioning Middleware
 
-No more versioning routes by adding parameters to the url or adding to the path name. Simple add ```accept-version: versionNumber``` to the request headers and let your middleware choose the correct function.
+No more versioning routes by adding parameters to the url or adding to the path name. Simply add ```accept-version: versionNumber``` to the request headers and let your middleware choose the correct function.
 
 ## Why use this version
-This version does not your express.Request, express.Response, or NextFunction types for the RouteHandler. So if you have a middleware before/after that adjusts response.locals to a strict type this will play nicely in TS.
+This version does not dictate your express.Request, express.Response, or NextFunction types for the RouteHandler. So if you have a middleware before/after that adjusts response.locals to a strict type this will play nicely in TS.
 
 ## Usage
 
@@ -29,7 +29,7 @@ router.get('/doThings', routeVersionHandler({
 
 ```
 
-Same example but with middleware for auth before.
+Same example but with middleware for auth before route versioning.
 
 ```
 //curl --header "accept-version: 0.1.5" localhost:8081/doThings
