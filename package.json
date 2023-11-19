@@ -1,6 +1,6 @@
 {
   "name": "express-route-versioning-middleware",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Middleware for versioning functions for express routers. Use 'accept-version' header on request. Does not dictate express.Request, express.Response, or express.NextFunction types",
   "main": "./dist/index.js",
   "types": "types.d.ts",
