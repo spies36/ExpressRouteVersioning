@@ -17,7 +17,7 @@ declare type RouteVersionFunctions = { [version: string]: Function }
 type pickFunctionByVersion = (req: VersionedRequest, res: VersionedResponse, next: NextFunction, args: RouteVersionFunctions) => Promise<Function>
 
 /**
- * Anonymous function whhich binds RouteVersionFunctions with req, res, next
+ * Anonymous function which binds RouteVersionFunctions with req, res, next
  */
 type routeVersionHandlerType = (args: RouteVersionFunctions) => pickFunctionByVersion
 
