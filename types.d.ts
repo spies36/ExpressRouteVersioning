@@ -1,6 +1,9 @@
-import { NextFunction } from 'express'
-import { VersionedRequest, VersionedResponse } from './types'
+import { Request, Response, NextFunction } from 'express'
 
+type VersionedRequest = Request<unknown, unknown, unknown, unknown>
+
+
+type VersionedResponse = Response<unknown, any>
 
 /**
  * Version Format - {Major.Minor.Sub} (2.1.0)
@@ -10,16 +13,19 @@ import { VersionedRequest, VersionedResponse } from './types'
 declare type RouteVersionFunctions = { [version: string]: Function }
 
 
+
+type pickFunctionByVersion = (req: VersionedRequest, res: VersionedResponse, next: NextFunction, args: RouteVersionFunctions) => Promise<Function>
+
 /**
- *  
+ * Anonymous function whhich binds RouteVersionFunctions with req, res, next
  */
-declare function pickFunctionByVersion(req: VersionedRequest, res: VersionedResponse, next: NextFunction, args: RouteVersionFunctions): Promise<Function>
+type routeVersionHandlerType = (args: RouteVersionFunctions) => pickFunctionByVersion
+
 
 /**
  * Middleware which returns the correct function to run
  */
-declare function routeVersionHandler(args: RouteVersionFunctions): typeof pickFunctionByVersion
-
+declare function routeVersionHandler(args: RouteVersionFunctions): routeVersionHandlerType
 export {
     routeVersionHandler,
     RouteVersionFunctions
