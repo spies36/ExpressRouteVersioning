@@ -9,17 +9,8 @@ type VersionedResponse = Response<unknown, any>
 type RouteVersionFunctions = { [version: string]: Function }
 
 
-type authStuff = {
-    authStuff: {
-        user: string,
-        favLanguage: 'javascript',
-    }
-}
-
-
 export {
     VersionedRequest,
     VersionedResponse,
-    authStuff,
     RouteVersionFunctions
 }

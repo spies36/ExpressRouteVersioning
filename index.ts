@@ -1,18 +1,23 @@
 import { NextFunction } from 'express';
 import { VersionedRequest, VersionedResponse, RouteVersionFunctions } from './types'
 
-
+/**
+ * Find the highest function version
+ */
 function getLatestFunctionVersion(args: RouteVersionFunctions): null | Function {
     let versions = Object.keys(args);
     if (versions.length === 0) {
         return null
     }
 
-    return args[versions[versions.length]]
+    return args[versions[versions.length - 1]]
 
 }
 
-function pickFunctionByVersion(req: VersionedRequest, res: VersionedResponse, next: NextFunction, args: RouteVersionFunctions) {
+/**
+ * Run the highest version function where requester's version is >= function version
+ */
+async function pickFunctionByVersion(req: VersionedRequest, res: VersionedResponse, next: NextFunction, args: RouteVersionFunctions): Promise<Function> {
 
     let versionFromClient = req.headers['accept-version'];
 
@@ -21,7 +26,7 @@ function pickFunctionByVersion(req: VersionedRequest, res: VersionedResponse, ne
         if (!latestFunc) {
             throw new Error(`No function defined for ${req.originalUrl}`);
         }
-        return next(latestFunc(req, res, next));
+        return latestFunc(req, res, next);
     }
 
     let [clientMajor, clientMinor, clientSub] = versionFromClient.split(/\./g);
@@ -50,11 +55,14 @@ function pickFunctionByVersion(req: VersionedRequest, res: VersionedResponse, ne
         }
     }
 
-    return next(functionToRun(req, res, next));
+    return functionToRun(req, res, next);
 
 }
 
-function routeVersionHandler(args: Record<string, Function>) {
+/**
+ * Return the correct function to run 
+ */
+function routeVersionHandler(args: RouteVersionFunctions) {
     return (req: VersionedRequest, res: VersionedResponse, next: NextFunction) => pickFunctionByVersion(req, res, next, args);
 }
 

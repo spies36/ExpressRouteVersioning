@@ -1,15 +1,19 @@
 {
-  "name": "expressrouteversioning",
+  "name": "express-route-versioning-middleware",
   "version": "1.0.0",
-  "description": "",
+  "description": "Middleware for versioning functions for express routers. Use 'accept-version' header on request. Does not dictate express.Request, express.Response, or express.NextFunction types",
   "main": "./dist/index.js",
   "types": "types.d.ts",
+  "files": [
+    "./dist/index.js",
+    "types.d.ts"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "send": "npm run build && publish"
+    "send": "npm run build && npm publish --access=public"
   },
-  "author": "",
+  "author": "Dylan Spies",
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.2",

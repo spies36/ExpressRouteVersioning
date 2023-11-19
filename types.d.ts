@@ -10,13 +10,17 @@ import { VersionedRequest, VersionedResponse } from './types'
 declare type RouteVersionFunctions = { [version: string]: Function }
 
 
-declare function pickFunctionByVersion(req: VersionedRequest, res: VersionedResponse, next: NextFunction, args: RouteVersionFunctions): void
+/**
+ *  
+ */
+declare function pickFunctionByVersion(req: VersionedRequest, res: VersionedResponse, next: NextFunction, args: RouteVersionFunctions): Promise<Function>
 
 /**
- * Middleware 
+ * Middleware which returns the correct function to run
  */
 declare function routeVersionHandler(args: RouteVersionFunctions): typeof pickFunctionByVersion
 
 export {
-    routeVersionHandler
+    routeVersionHandler,
+    RouteVersionFunctions
 }
