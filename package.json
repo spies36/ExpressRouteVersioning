@@ -1,6 +1,6 @@
 {
   "name": "express-route-versioning-middleware",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Middleware for versioning functions for express routers. Use 'accept-version' header on request. Does not dictate express.Request, express.Response, or express.NextFunction types",
   "main": "./dist/index.js",
   "types": "types.d.ts",
@@ -16,6 +16,14 @@
   "author": "Dylan Spies",
   "license": "ISC",
   "homepage": "https://github.com/spies36/ExpressRouteVersioning#readme",
+  "keywords": [
+    "express",
+    "version",
+    "versioning",
+    "router",
+    "middleware",
+    "express-route-versioning-middleware"
+  ],
   "dependencies": {
     "express": "^4.18.2",
     "typescript": "^5.2.2"
