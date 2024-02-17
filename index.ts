@@ -66,6 +66,11 @@ function routeVersionHandler(args: RouteVersionFunctions) {
     return (req: VersionedRequest, res: VersionedResponse, next: NextFunction) => pickFunctionByVersion(req, res, next, args);
 }
 
+export const exportsForTesting = {
+    getLatestFunctionVersion,
+    pickFunctionByVersion
+}
+
 export {
     routeVersionHandler
 }
