@@ -1,5 +1,7 @@
 # Express Route Versioning Middleware
 
+[![ExpressRouteVersioning Test](https://github.com/spies36/ExpressRouteVersioning/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/spies36/ExpressRouteVersioning/actions/workflows/test.yml)
+
 No more versioning routes by adding parameters to the url or adding to the path name. Simply add ```accept-version: versionNumber``` to the request headers and let your middleware choose the correct function.
 
 ## Why use this version
