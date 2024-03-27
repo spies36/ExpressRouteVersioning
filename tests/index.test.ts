@@ -1,8 +1,7 @@
-const { routeVersionHandler, exportsForTesting } = require('../dist/index.js');
-const { test, expect } = require('@jest/globals');
-const mockData = require('./mockData.js')
-const mockRequest = require('./mockRequests.js')
-
+import * as mockData from './mockData';
+import * as mockRequest from './mockRequests';
+import { test, expect } from '@jest/globals'
+import { routeVersionHandler, exportsForTesting } from '../index';
 
 test('Check getlatestFunctionVersion returns latest function', () => {
     //SubVersion Only
