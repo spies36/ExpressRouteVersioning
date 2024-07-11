@@ -26,6 +26,7 @@ type routeVersionHandlerType = (args: RouteVersionFunctions) => pickFunctionByVe
  * Middleware which returns the correct function to run
  */
 declare function routeVersionHandler(args: RouteVersionFunctions): routeVersionHandlerType
+
 export {
     routeVersionHandler,
     RouteVersionFunctions
