@@ -1,6 +1,6 @@
 {
   "name": "express-route-versioning-middleware",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Middleware for versioning functions for express routers. Use 'accept-version' header on request. Does not dictate express.Request, express.Response, or express.NextFunction types",
   "main": "./dist/index.js",
   "types": "types.d.ts",
@@ -26,16 +26,16 @@
     "express-route-versioning-middleware"
   ],
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.21.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.24.7",
-    "@babel/preset-env": "^7.24.7",
+    "@babel/core": "^7.25.2",
+    "@babel/preset-env": "^7.25.4",
     "@babel/preset-typescript": "^7.24.7",
     "@types/express": "^4.17.21",
-    "@types/jest": "^29.5.12",
+    "@types/jest": "^29.5.13",
     "babel-jest": "^29.7.0",
     "jest": "^29.7.0",
-    "typescript": "^5.5.3"
+    "typescript": "^5.6.2"
   }
 }
