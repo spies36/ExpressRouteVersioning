@@ -2,10 +2,13 @@
 
 [![ExpressRouteVersioning Test](https://github.com/spies36/ExpressRouteVersioning/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/spies36/ExpressRouteVersioning/actions/workflows/test.yml)
 
+
 No more versioning routes by adding parameters to the url or adding to the path name. Simply add ```accept-version: versionNumber``` to the request headers and let your middleware choose the correct function.
 
 ## Why use this version
 This version does not dictate your express.Request, express.Response, or NextFunction types for the RouteHandler. So if you have a middleware before/after that adjusts response.locals to a strict type this will play nicely in TS.
+
+ **Supports Express 5!**
 
 ## Usage
 
@@ -76,9 +79,8 @@ curl --header "accept-version: 1.2.3" localhost:8081/doThings
 
 ```
 
-## Similar packages
+Version Information
 
-- https://www.npmjs.com/package/express-version-route
-- https://www.npmjs.com/package/express-routes-versioning (I really like this one, it just does not play nice with middlewares changing locals.)
-
+- 1.x.x Supports Express ^4.x.x
+- 2.x.x Supports Express ^5.x.x
 
