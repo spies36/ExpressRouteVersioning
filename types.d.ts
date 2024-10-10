@@ -1,26 +1,23 @@
-import { Request, Response, NextFunction } from 'express'
-
-type VersionedRequest = Request<unknown, unknown, unknown, unknown>
-
-
-type VersionedResponse = Response<unknown, any>
+import { RequestHandler } from 'express';
+import { ParamsDictionary, Query } from 'express-serve-static-core'
 
 /**
  * Version Format - {Major.Minor.Sub} (2.1.0)
  * 
  * **MUST be in ascending version order.**
  */
-declare type RouteVersionFunctions = { [version: string]: Function }
-
-
-
-type pickFunctionByVersion = (req: VersionedRequest, res: VersionedResponse, next: NextFunction, args: RouteVersionFunctions) => Promise<Function>
+type RouteVersionFunctions<
+    P = ParamsDictionary,
+    ResBody = any,
+    ReqBody = any,
+    ReqQuery = Query,
+    Locals extends Record<string, any> = any
+> = { [version: string]: RequestHandler<P, ResBody, ReqBody, ReqQuery, Locals> }
 
 /**
- * Anonymous function which binds RouteVersionFunctions with req, res, next
+ * This function finds the correct versioned function and calls it with respect to Request, Response, NextFunction.
  */
-type routeVersionHandlerType = (args: RouteVersionFunctions) => pickFunctionByVersion
-
+type routeVersionHandlerType = (args: RouteVersionFunctions) => void | Promise<void>
 
 /**
  * Middleware which returns the correct function to run

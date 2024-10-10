@@ -1,16 +1,16 @@
-import { Request, Response } from 'express';
-
-type VersionedRequest = Request<unknown, unknown, unknown, unknown>
-
-
-type VersionedResponse = Response<unknown, any>
+import { RequestHandler } from 'express';
+import { ParamsDictionary, Query } from 'express-serve-static-core'
 
 
-type RouteVersionFunctions = { [version: string]: Function }
+type RouteVersionFunctions<
+    P = ParamsDictionary,
+    ResBody = any,
+    ReqBody = any,
+    ReqQuery = Query,
+    Locals extends Record<string, any> = any
+> = { [version: string]: RequestHandler<P, ResBody, ReqBody, ReqQuery, Locals> }
 
 
 export {
-    VersionedRequest,
-    VersionedResponse,
     RouteVersionFunctions
 }

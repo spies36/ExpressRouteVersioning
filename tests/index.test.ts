@@ -30,89 +30,78 @@ test('Check getlatestFunctionVersion returns latest function', () => {
     ).toBe(null)
 });
 
-test('pickFunctionByVersion throws with no functions or header', async () => {
-
-    await expect(
-        exportsForTesting.pickFunctionByVersion(mockRequest.requestWithNoVersion,
-            mockRequest.res, mockRequest.nextFunc, {}
-        )
-    ).rejects.toThrow(`No function defined for ${mockRequest.requestWithNoVersion.originalUrl}`)
+test('pickFunctionByVersion throws with no functions or header', () => {
+    try {
+        expect(
+            exportsForTesting.pickFunctionByVersion(mockRequest.requestWithNoVersion, {})
+        ).toThrowError();
+    } catch (error: any) {
+        expect(error.message).toEqual(`No function defined for ${mockRequest.requestWithNoVersion.originalUrl}`)
+    }
 })
 
-test('pickFunctionByVersion returns highest function with no header', async () => {
+test('pickFunctionByVersion returns highest function with no header', () => {
     //setup mock for highest subVersion
-    mockData.verionsSubOnly['0.0.2'] = jest.fn();
-    await exportsForTesting.pickFunctionByVersion(mockRequest.requestWithNoVersion,
-        mockRequest.res, mockRequest.nextFunc, mockData.verionsSubOnly
-    )
-    expect(mockData.verionsSubOnly['0.0.2']).toHaveBeenCalled()
+    mockData.verionsSubOnly['0.0.2'] = jest.fn(() => { return '0.0.2' });
+    exportsForTesting.pickFunctionByVersion(mockRequest.requestWithNoVersion, mockData.verionsSubOnly)
+    expect(exportsForTesting.pickFunctionByVersion(mockRequest.requestWithNoVersion, mockData.verionsSubOnly))
+        .toEqual(mockData.verionsSubOnly['0.0.2'])
 })
 
-test('pickFunctionByVersion calls highest version on matching header', async () => {
+test('pickFunctionByVersion calls highest version on matching header', () => {
     //Setup Mocks For highest version
-    mockData.verionsSubOnly['0.0.2'] = jest.fn();
-    mockData.versionsMinorOnly['0.3.0'] = jest.fn();
-    mockData.versionsMajorOnly['3.0.0'] = jest.fn();
-    mockData.versionsMajMinSub['1.1.1'] = jest.fn();
+    mockData.verionsSubOnly['0.0.2'] = jest.fn(() => { return '0.0.2' });
+    mockData.versionsMinorOnly['0.3.0'] = jest.fn(() => { return '0.3.0' });
+    mockData.versionsMajorOnly['3.0.0'] = jest.fn(() => { return '3.0.0' });
+    mockData.versionsMajMinSub['1.1.1'] = jest.fn(() => { return '1.1.1' });
 
-    await exportsForTesting.pickFunctionByVersion(mockRequest.requestWithHighestSubVersion,
-        mockRequest.res, mockRequest.nextFunc, mockData.verionsSubOnly
-    )
-    expect(mockData.verionsSubOnly['0.0.2']).toHaveBeenCalled()
+    expect(exportsForTesting.pickFunctionByVersion(mockRequest.requestWithHighestSubVersion, mockData.verionsSubOnly))
+        .toEqual(mockData.verionsSubOnly['0.0.2'])
 
-    await exportsForTesting.pickFunctionByVersion(mockRequest.requestWithHighestMinorVersion,
-        mockRequest.res, mockRequest.nextFunc, mockData.versionsMinorOnly
-    )
-    expect(mockData.versionsMinorOnly['0.3.0']).toHaveBeenCalled()
 
-    await exportsForTesting.pickFunctionByVersion(mockRequest.requestWithHighestMajorVersion,
-        mockRequest.res, mockRequest.nextFunc, mockData.versionsMajorOnly
-    )
-    expect(mockData.versionsMajorOnly['3.0.0']).toHaveBeenCalled()
+    expect(exportsForTesting.pickFunctionByVersion(mockRequest.requestWithHighestMinorVersion, mockData.versionsMinorOnly))
+        .toEqual(mockData.versionsMinorOnly['0.3.0'])
 
-    await exportsForTesting.pickFunctionByVersion(mockRequest.requestWithHighestMajMinSubVersion,
-        mockRequest.res, mockRequest.nextFunc, mockData.versionsMajMinSub
-    )
-    expect(mockData.versionsMajMinSub['1.1.1']).toHaveBeenCalled()
+    expect(exportsForTesting.pickFunctionByVersion(mockRequest.requestWithHighestMajorVersion, mockData.versionsMajorOnly))
+        .toEqual(mockData.versionsMajorOnly['3.0.0'])
+
+
+    expect(exportsForTesting.pickFunctionByVersion(mockRequest.requestWithHighestMajMinSubVersion, mockData.versionsMajMinSub))
+        .toEqual(mockData.versionsMajMinSub['1.1.1'])
 })
 
-test('pickFunctionByVersion calls matching function that is not highest', async () => {
+test('pickFunctionByVersion calls matching function that is not highest', () => {
     //setup mock for middle subVersion
-    mockData.verionsSubOnly['0.0.1'] = jest.fn();
-    await exportsForTesting.pickFunctionByVersion(mockRequest.requestWithMiddleSubVersion,
-        mockRequest.res, mockRequest.nextFunc, mockData.verionsSubOnly
+    mockData.verionsSubOnly['0.0.1'] = jest.fn(() => { return '0.0.1' });
+    expect(mockData.verionsSubOnly['0.0.1']).toEqual(
+        exportsForTesting.pickFunctionByVersion(mockRequest.requestWithMiddleSubVersion, mockData.verionsSubOnly)
     )
-    expect(mockData.verionsSubOnly['0.0.1']).toHaveBeenCalled()
 
     //setup mock for middle minor version
-    mockData.versionsMinorOnly['0.2.0'] = jest.fn();
-    await exportsForTesting.pickFunctionByVersion(mockRequest.requestWithMiddleMinorVersion,
-        mockRequest.res, mockRequest.nextFunc, mockData.versionsMinorOnly
+    mockData.versionsMinorOnly['0.2.0'] = jest.fn(() => { return '0.2.0' });
+    expect(mockData.versionsMinorOnly['0.2.0']).toEqual(
+        exportsForTesting.pickFunctionByVersion(mockRequest.requestWithMiddleMinorVersion, mockData.versionsMinorOnly)
     )
-    expect(mockData.versionsMinorOnly['0.2.0']).toHaveBeenCalled()
 
     //setup mock for middle major version
-    mockData.versionsMajorOnly['2.0.0'] = jest.fn();
-    await exportsForTesting.pickFunctionByVersion(mockRequest.requestWithMiddleMajorVersion,
-        mockRequest.res, mockRequest.nextFunc, mockData.versionsMajorOnly
+    mockData.versionsMajorOnly['2.0.0'] = jest.fn(() => { return '2.0.0' });
+    expect(mockData.versionsMajorOnly['2.0.0']).toEqual(
+        exportsForTesting.pickFunctionByVersion(mockRequest.requestWithMiddleMajorVersion, mockData.versionsMajorOnly)
     )
-    expect(mockData.versionsMajorOnly['2.0.0']).toHaveBeenCalled()
 
     //setup mock for middle MajMinSub version
-    mockData.versionsMajMinSub['1.0.0'] = jest.fn();
-    await exportsForTesting.pickFunctionByVersion(mockRequest.requestWithMiddleMajMinSubVersion,
-        mockRequest.res, mockRequest.nextFunc, mockData.versionsMajMinSub
+    mockData.versionsMajMinSub['1.0.0'] = jest.fn(() => { return '1.0.0' });
+    expect(mockData.versionsMajMinSub['1.0.0']).toEqual(
+        exportsForTesting.pickFunctionByVersion(mockRequest.requestWithMiddleMajMinSubVersion, mockData.versionsMajMinSub)
     )
-    expect(mockData.versionsMajMinSub['1.0.0']).toHaveBeenCalled()
 })
 
-test('pickFunctionByVersion with no exact match version', async () => {
+test('pickFunctionByVersion with no exact match version', () => {
     //setup mock for middle MajMinSub version
-    mockData.versionsMajMinSub['1.0.0'] = jest.fn()
-    await exportsForTesting.pickFunctionByVersion(mockRequest.requestWithNoMatchMajMinSubVersion,
-        mockRequest.res, mockRequest.nextFunc, mockData.versionsMajMinSub
+    mockData.versionsMajMinSub['1.0.0'] = jest.fn(() => { return '1.0.0' })
+    expect(mockData.versionsMajMinSub['1.0.0']).toEqual(
+        exportsForTesting.pickFunctionByVersion(mockRequest.requestWithNoMatchMajMinSubVersion, mockData.versionsMajMinSub)
     )
-    expect(mockData.versionsMajMinSub['1.0.0']).toHaveBeenCalled()
 })
 
 test('routeVersionHandlerMiddleware returns correct function', async () => {
@@ -120,7 +109,7 @@ test('routeVersionHandlerMiddleware returns correct function', async () => {
     const middleWare = routeVersionHandler(mockData.versionsMajorOnly);
 
     //make sure the actual call works
-    mockData.versionsMajorOnly['3.0.0'] = jest.fn();
+    mockData.versionsMajorOnly['3.0.0'] = jest.fn(() => { return '3.0.0' });
     await middleWare(mockRequest.requestWithHighestMajorVersion, mockRequest.res, mockRequest.nextFunc);
-    expect(mockData.versionsMajorOnly['3.0.0']).toHaveBeenCalled()
+    expect(mockData.versionsMajorOnly['3.0.0'])
 })

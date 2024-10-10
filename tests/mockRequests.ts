@@ -1,11 +1,10 @@
 import { response, NextFunction, Request } from 'express';
-import { VersionedRequest } from '../types'
 
 function buildRequest(headers: Record<string, string>) {
     return {
         body: {},
         headers: headers
-    } as VersionedRequest
+    } as Request
 }
 
 export const requestWithNoVersion = buildRequest({});
