@@ -16,9 +16,10 @@ type authStuff = {
     }
 }
 
+
 function fancyMiddleware(req: Request, res: Response, next: NextFunction) {
     let authInfoObj = {
-        user: 'pizzMan',
+        user: 'pizzaMan',
         favLanguage: 'javascript'
     }
     res.locals.authInfo = authInfoObj
@@ -27,15 +28,17 @@ function fancyMiddleware(req: Request, res: Response, next: NextFunction) {
 }
 
 //#region Test Functions 
-function testFunc1(req: Request, res: Response<any, authStuff>, next: NextFunction) {
+export function testFunc1(req: Request, res: Response<any, authStuff>, next: NextFunction) {
     console.log(res.locals.authInfo)
-    return res.send('Test1');
+    res.send('Test1');
+    return;
 }
 
 async function testFunc2(req: Request, res: Response<any, authStuff>, next: NextFunction) {
     console.log(res.locals.authInfo)
     await new Promise(resolve => setTimeout(resolve, 3000));
-    return res.send('Test2');
+    res.send('Test2');
+    return
 }
 //#endregion
 

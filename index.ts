@@ -1,10 +1,10 @@
-import { NextFunction } from 'express';
-import { VersionedRequest, VersionedResponse, RouteVersionFunctions } from './types'
+import { Request, Response, NextFunction } from 'express';
+import { RouteVersionFunctions, } from './types'
 
 /**
  * Find the highest function version
  */
-function getLatestFunctionVersion(args: RouteVersionFunctions): null | Function {
+function getLatestFunctionVersion(args: RouteVersionFunctions) {
     let versions = Object.keys(args);
     if (versions.length === 0) {
         return null
@@ -17,7 +17,7 @@ function getLatestFunctionVersion(args: RouteVersionFunctions): null | Function 
 /**
  * Run the highest version function where requester's version is >= function version
  */
-async function pickFunctionByVersion(req: VersionedRequest, res: VersionedResponse, next: NextFunction, args: RouteVersionFunctions): Promise<Function> {
+function pickFunctionByVersion(req: Request, args: RouteVersionFunctions) {
 
     let versionFromClient = req.headers['accept-version'];
 
@@ -26,12 +26,12 @@ async function pickFunctionByVersion(req: VersionedRequest, res: VersionedRespon
         if (!latestFunc) {
             throw new Error(`No function defined for ${req.originalUrl}`);
         }
-        return latestFunc(req, res, next);
+        return latestFunc;
     }
 
     let [clientMajor, clientMinor, clientSub] = versionFromClient.split(/\./g);
 
-    let functionToRun = args[0]
+    let functionToRun = Object.values(args)[0]//set default as the earliest
 
     for (let version of Object.keys(args)) {
         let [major, minor, sub] = version.split(/\./g);
@@ -55,7 +55,7 @@ async function pickFunctionByVersion(req: VersionedRequest, res: VersionedRespon
         }
     }
 
-    return functionToRun(req, res, next);
+    return functionToRun;
 
 }
 
@@ -63,7 +63,10 @@ async function pickFunctionByVersion(req: VersionedRequest, res: VersionedRespon
  * Return the correct function to run 
  */
 function routeVersionHandler(args: RouteVersionFunctions) {
-    return (req: VersionedRequest, res: VersionedResponse, next: NextFunction) => pickFunctionByVersion(req, res, next, args);
+    return function (req: Request, res: Response, next: NextFunction) {
+        let functionToRun = pickFunctionByVersion(req, args);
+        return functionToRun(req, res, next);
+    }
 }
 
 export const exportsForTesting = {
