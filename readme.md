@@ -2,19 +2,20 @@
 
 [![ExpressRouteVersioning Test](https://github.com/spies36/ExpressRouteVersioning/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/spies36/ExpressRouteVersioning/actions/workflows/test.yml)
 
-
-No more versioning routes by adding parameters to the url or adding to the path name. Simply add ```accept-version: versionNumber``` to the request headers and let your middleware choose the correct function.
+No more versioning routes by adding parameters to the url or adding to the path name. Simply add `accept-version: versionNumber` to the request headers and let your middleware choose the correct function.
 
 ## Why use this version
+
 This version does not dictate your express.Request, express.Response, or NextFunction types for the RouteHandler. So if you have a middleware before/after that adjusts response.locals to a strict type this will play nicely in TS.
 
- **Supports Express 5!**
+**Supports Express 5.1.0!**
 
 ## Usage
 
 **Version numbers must be in ascending order**
 
 Basic express usage
+
 ```
 import express, { Request, Response, NextFunction } from 'express';
 import { routeVersionHandler } from 'express-route-versioning-middleware';
@@ -52,11 +53,13 @@ router.get('/doThings', fancyAuthMiddleware, routeVersionHandler({
 Run the highest version function where requester's version is >= function version
 
 In simple terms
+
 ```
 'minimumVersionRequired': functionToCall
 ```
 
 Examples:
+
 ```
 routeVersionHandler({
     '0.0.0': testFunc1,
@@ -83,4 +86,3 @@ Version Information
 
 - 1.x.x Supports Express ^4.x.x
 - 2.x.x Supports Express ^5.x.x
-
